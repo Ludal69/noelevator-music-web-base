@@ -1,27 +1,23 @@
-import express from "express";
-import cors from "cors";
+import app from "./server";
+// import { dataSource } from "./config/data-source-config";
+import db, { genId } from "./modules/db";
 
-const app = express();
+async function main() {
+  try {
+    // Test the database connection
+    await db.$connect();
+    console.log("Database connected successfully!");
 
-app.use(cors());
+    // Start the Express server
+    app.listen(4000, () => {
+      console.log(
+        "Express server has started on port 4000. Open http://localhost:4000/api to see results"
+      );
+    });
+  } catch (error) {
+    console.error("Error during database initialization:", error);
+    process.exit(1);
+  }
+}
 
-app.get("/", (req, res) => {
-  res.json([
-    {
-      id: "1",
-      title: "Book Review: The Name of the Wind",
-    },
-    {
-      id: "2",
-      title: "Game Review: Pokemon Brillian Diamond",
-    },
-    {
-      id: "3",
-      title: "Show Review: Alice in Borderland",
-    },
-  ]);
-});
-
-app.listen(4000, () => {
-  console.log("listening for requests on port 4000");
-});
+main();

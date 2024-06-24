@@ -1,10 +1,27 @@
 services:
+  db:
+    container_name: db_c
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=noelevator_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
   backend:
     build: ./backend
     container_name: backend_c
     ports:
       - 4000:4000
       - 9229:9229
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/noelevator_dev
     develop:
       watch: #remplace l'option volumes (de docker-compose.yml)
         - action: sync
@@ -12,6 +29,10 @@ services:
           target: /app
         - action: rebuild
           path: ./backend/package.json
+    networks:
+      - app-network
+    depends_on:
+      - db
 
   frontend:
     build: ./frontend
@@ -25,3 +46,28 @@ services:
           target: /app
         - action: rebuild
           path: ./frontend/package.json
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  pgadmin:
+    container_name: pgadmin_c
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      # PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False" #si problème CSRF persiste
+    ports:
+      - "5050:80"
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
