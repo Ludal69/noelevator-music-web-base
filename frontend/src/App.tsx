@@ -1,21 +1,24 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import Home from "./pages/Home/Home";
 import "./App.css";
-import MerchProductList from "./components/MerchProductList";
 
-function App() {
-  const showAlert = () => {
-    alert("bonjour");
-  };
-
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={showAlert}>Show Alert</button>
-      </header>
-      <main>
-        <MerchProductList />
-      </main>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <main className="pt-20 lg:pt-24 flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
