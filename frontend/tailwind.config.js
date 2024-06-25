@@ -8,7 +8,7 @@ module.exports = {
         "custom-blue": "#0d2760",
       },
       backgroundImage: {
-        "custom-background": "url('./assets/images/background.jpg')",
+        "custom-background": "url('./assets/Images/background.jpg')",
       },
       fontFamily: {
         logo: ["Moon Get", "sans-serif"],

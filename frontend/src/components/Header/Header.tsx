@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
-import logo from "../../assets/images/no_elevator_gf_logo.svg"; // Import correct de l'image
+import logo from "../../assets/Images/no_elevator_gf_logo.svg"; // Import correct de l'image
 
 const Header: React.FC = () => {
   return (
