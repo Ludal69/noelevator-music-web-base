@@ -3,13 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home/Home";
-import Videos from "./pages/Videos/Videos";
-// import Listen from "./pages/Listen/Listen";
-// import Shows from "./pages/Shows/Shows";
-// import Store from "./pages/Store/Store";
-// import Bio from "./pages/Bio/Bio";
-// import Photos from "./pages/Media/Photos";
-// import Contact from "./pages/Contact/Contact";
+import Media from "./pages/Media/Media";
+import Listen from "./pages/Listen/Listen";
 import "./index.css";
 
 const App: React.FC = () => {
@@ -20,13 +15,8 @@ const App: React.FC = () => {
         <main className="pt-20 lg:pt-24 flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/videos" element={<Videos />} />
-            {/* <Route path="/listen" element={<Listen />} />
-            <Route path="/shows" element={<Shows />} />
-            <Route path="/store" element={<Store />} />
-            <Route path="/bio" element={<Bio />} />
-            <Route path="/photos" element={<Photos />} />
-            <Route path="/contact" element={<Contact />} /> */}
+            <Route path="/media" element={<Media />} />
+            <Route path="/listen" element={<Listen />} />
           </Routes>
         </main>
         <Footer />

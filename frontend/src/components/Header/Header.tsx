@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
-import logo from "../../assets/images/no_elevator_gf_logo.svg";
+import logo from "../../assets/Images/no_elevator_gf_logo.svg";
 
 const Header: React.FC = () => {
   return (
@@ -20,23 +20,9 @@ const Header: React.FC = () => {
           <Link to="/bio" className="hover:underline">
             Bio
           </Link>
-          <div className="relative group">
-            <button className="hover:underline">Media</button>
-            <div className="absolute hidden group-hover:block bg-gray-700 text-white rounded">
-              <Link
-                to="/photos"
-                className="block px-4 py-2 hover:bg-gray-600 bg-custom-blue text-custom-yellow"
-              >
-                Photos
-              </Link>
-              <Link
-                to="/videos"
-                className="block px-4 py-2 hover:bg-gray-600 bg-custom-blue text-custom-yellow"
-              >
-                Videos
-              </Link>
-            </div>
-          </div>
+          <Link to="/media" className="hover:underline">
+            Media
+          </Link>
           <Link to="/contact" className="hover:underline">
             Contact
           </Link>
