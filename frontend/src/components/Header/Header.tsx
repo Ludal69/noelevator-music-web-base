@@ -5,7 +5,7 @@ import logo from "../../assets/Images/no_elevator_gf_logo.svg";
 
 const Header: React.FC = () => {
   return (
-    <header className="w-full bg-custom-blue text-custom-yellow fixed top-0 left-0 z-50 h-20 lg:h-24">
+    <header className="w-full bg-custom-blue text-custom-yellow fixed top-0 left-0 z-50 h-20 lg:h-24 border-b-2 border-custom-yellow">
       <div className="container mx-auto flex justify-between items-center px-4 h-full">
         <nav className="flex space-x-4 text-lg w-2/5 justify-center items-center h-full font-titles">
           <Link to="/listen" className="hover:underline">
