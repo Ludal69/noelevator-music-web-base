@@ -134,7 +134,7 @@ const Shows: React.FC = () => {
                       network="facebook"
                       style={{ height: 20, width: 20, marginRight: "8px" }}
                     />
-                    Share on Facebook
+                    Event on Facebook
                   </a>
                 </div>
               </div>
