@@ -7,6 +7,7 @@ import Media from "./pages/Media/Media";
 import Listen from "./pages/Listen/Listen";
 import Shows from "./pages/Shows/Shows";
 import Bio from "./pages/Bio/Bio";
+import Contact from "./pages/Contact/Contact";
 import "./index.css";
 
 const App: React.FC = () => {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <Route path="/listen" element={<Listen />} />
             <Route path="/shows" element={<Shows />} />
             <Route path="/bio" element={<Bio />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
         <Footer />
