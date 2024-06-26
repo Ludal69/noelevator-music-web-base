@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home/Home";
 import Media from "./pages/Media/Media";
 import Listen from "./pages/Listen/Listen";
+import Shows from "./pages/Shows/Shows";
 import "./index.css";
 
 const App: React.FC = () => {
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/media" element={<Media />} />
             <Route path="/listen" element={<Listen />} />
+            <Route path="/shows" element={<Shows />} />
           </Routes>
         </main>
         <Footer />
