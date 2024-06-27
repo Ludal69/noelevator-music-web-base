@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sendContactMessage } from "../../services/contactService";
+import DOMPurify from "dompurify";
 
 const Contact: React.FC = () => {
   const [name, setName] = useState("");
@@ -10,7 +11,10 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await sendContactMessage({ name, email, message });
+      // Sanitize the input message
+      const sanitizedMessage = DOMPurify.sanitize(message);
+
+      await sendContactMessage({ name, email, message: sanitizedMessage });
       setStatus("Message sent successfully!");
       setName("");
       setEmail("");
