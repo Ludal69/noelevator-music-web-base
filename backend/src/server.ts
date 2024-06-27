@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import merchRoutes from "./routes/merchRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import cors from "cors";

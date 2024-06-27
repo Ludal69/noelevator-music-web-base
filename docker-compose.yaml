@@ -3,10 +3,8 @@ services:
     container_name: db_c
     image: postgres
     restart: always
-    environment:
-      - POSTGRES_DB=noelevator_dev
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - ./backend/.env
     ports:
       - "5432:5432"
     networks:
@@ -20,8 +18,8 @@ services:
     ports:
       - 4000:4000
       - 9229:9229
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/noelevator_dev
+    env_file:
+      - ./backend/.env
     develop:
       watch: #remplace l'option volumes (de docker-compose.yml)
         - action: sync

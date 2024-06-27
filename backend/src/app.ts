@@ -1,6 +1,5 @@
 import app from "./server";
-// import { dataSource } from "./config/data-source-config";
-import db, { genId } from "./modules/db";
+import db from "./modules/db";
 
 async function main() {
   try {
