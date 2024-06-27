@@ -15,6 +15,25 @@ const run = async () => {
       },
     ],
   });
+
+  await db.contactMessage.createMany({
+    data: [
+      {
+        id: genId(),
+        name: "John Doe",
+        email: "john.doe@example.com",
+        message: "Hello, I have a question about your product.",
+        createdAt: new Date(),
+      },
+      {
+        id: genId(),
+        name: "Jane Smith",
+        email: "jane.smith@example.com",
+        message: "Hi, I would like to know more about your services.",
+        createdAt: new Date(),
+      },
+    ],
+  });
 };
 
 // Auto-run if main script (not imported)

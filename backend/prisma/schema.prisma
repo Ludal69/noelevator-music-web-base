@@ -20,3 +20,13 @@ model MerchProduct {
 
   @@map(name: "merch_products")
 }
+
+model ContactMessage {
+  id        String   @id
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+
+  @@map(name: "contact_messages")  // Nom spécifique pour la table
+}
