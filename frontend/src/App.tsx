@@ -8,6 +8,7 @@ import Listen from "./pages/Listen/Listen";
 import Shows from "./pages/Shows/Shows";
 import Bio from "./pages/Bio/Bio";
 import Contact from "./pages/Contact/Contact";
+import Store from "./pages/Store/Store";
 import "./index.css";
 
 const App: React.FC = () => {
@@ -23,6 +24,7 @@ const App: React.FC = () => {
             <Route path="/shows" element={<Shows />} />
             <Route path="/bio" element={<Bio />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/store" element={<Store />} />
           </Routes>
         </main>
         <Footer />
