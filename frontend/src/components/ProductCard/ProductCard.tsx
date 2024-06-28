@@ -4,23 +4,16 @@ interface ProductCardProps {
   image: string;
   title: string;
   price: string;
-  link: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  image,
-  title,
-  price,
-  link,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ image, title, price }) => {
   return (
     <div className="border-2 border-custom-yellow rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-      <img className="w-full" src={image} alt={title} />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{title}</div>
-        <p className="text-gray-700 text-base">{price}</p>
+      <img src={image} alt={title} className="w-full h-64 object-cover" />
+      <div className="p-4">
+        <h2 className="font-bold text-lg">{title}</h2>
+        <p className="text-custom-yellow text-xl">{price}</p>
       </div>
-      <div className="px-6 pt-4 pb-2"></div>
     </div>
   );
 };

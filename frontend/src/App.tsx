@@ -9,6 +9,7 @@ import Shows from "./pages/Shows/Shows";
 import Bio from "./pages/Bio/Bio";
 import Contact from "./pages/Contact/Contact";
 import Store from "./pages/Store/Store";
+import ProductDetail from "./pages/ProductDetail/ProductDetail";
 import "./index.css";
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="/bio" element={<Bio />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/store" element={<Store />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
           </Routes>
         </main>
         <Footer />
