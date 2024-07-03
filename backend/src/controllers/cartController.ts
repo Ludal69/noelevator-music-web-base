@@ -1,10 +1,17 @@
-import { Request, Response } from "express";
-import db, { genId } from "../modules/db"; // Ensure this points to your Prisma client
+import { Response } from "express";
+import db, { genId } from "../modules/db";
+import { CustomRequest } from "../types";
 
 export class CartController {
-  async getCartItems(req: Request, res: Response) {
+  async getCartItems(req: CustomRequest, res: Response) {
     try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
       const cartItems = await db.cartItem.findMany({
+        where: { userId },
         include: { product: true },
       });
       res.json(cartItems);
@@ -13,34 +20,40 @@ export class CartController {
     }
   }
 
-  async addToCart(req: Request, res: Response) {
+  async addToCart(req: CustomRequest, res: Response) {
     try {
-      const { productId, quantity } = req.body;
+      const { productId, quantity, size } = req.body;
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
 
-      // Check if the cart item already exists
-      const existingCartItem = await db.cartItem.findFirst({
-        where: { productId },
+      const existingCartItem = await db.cartItem.findUnique({
+        where: {
+          productId_userId_size: { productId, userId, size },
+        },
       });
 
       if (existingCartItem) {
-        // If it exists, update the quantity
         const updatedCartItem = await db.cartItem.update({
-          where: { id: existingCartItem.id },
+          where: {
+            productId_userId_size: { productId, userId, size },
+          },
           data: { quantity: existingCartItem.quantity + quantity },
           include: { product: true },
         });
         res.json({ message: "Cart item updated", data: updatedCartItem });
       } else {
-        // If it doesn't exist, create a new cart item
         const newCartItem = await db.cartItem.create({
           data: {
             id: genId(),
             productId,
+            userId,
             quantity,
+            size,
           },
           include: { product: true },
         });
-
         res
           .status(201)
           .json({ message: "Cart item created", data: newCartItem });
@@ -50,8 +63,12 @@ export class CartController {
     }
   }
 
-  async removeFromCart(req: Request, res: Response) {
+  async removeFromCart(req: CustomRequest, res: Response) {
     const { id } = req.body;
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
     try {
       await db.cartItem.delete({
