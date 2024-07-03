@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -10,16 +10,22 @@ import Bio from "./pages/Bio/Bio";
 import Contact from "./pages/Contact/Contact";
 import Store from "./pages/Store/Store";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
-import CartDisplay from "./components/CartDisplay/CartDisplay"; // Add this import
-import { CartProvider } from "./context/CartContext"; // Add this import
+import CartDrawer from "./components/CartDrawer/CartDrawer";
+import { CartProvider } from "./context/CartContext";
 import "./index.css";
 
 const App: React.FC = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (isOpen: boolean) => {
+    setDrawerOpen(isOpen);
+  };
+
   return (
     <CartProvider>
       <Router>
         <div className="App min-h-screen flex flex-col">
-          <Header />
+          <Header toggleDrawer={toggleDrawer} />
           <main className="pt-20 lg:pt-24 flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -29,12 +35,15 @@ const App: React.FC = () => {
               <Route path="/bio" element={<Bio />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/store" element={<Store />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
+              <Route
+                path="/products/:id"
+                element={<ProductDetail toggleDrawer={toggleDrawer} />}
+              />
             </Routes>
           </main>
           <Footer />
         </div>
-        <CartDisplay /> {/* Add this to display cart contents */}
+        <CartDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />
       </Router>
     </CartProvider>
   );

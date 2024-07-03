@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { getProductById } from "../../services/productService";
 import { useCart } from "../../context/CartContext";
@@ -18,8 +18,13 @@ const importImage = async (path: string) => {
 
 Modal.setAppElement("#root"); // Set root element for accessibility
 
-const ProductDetail: React.FC = () => {
+interface ProductDetailProps {
+  toggleDrawer: (isOpen: boolean) => void;
+}
+
+const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
   const [image, setImage] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -68,6 +73,7 @@ const ProductDetail: React.FC = () => {
       });
       // Add to cart in the backend
       await apiAddToCart(product.id, 1);
+      toggleDrawer(true); // Open the cart drawer
     }
   };
 
@@ -76,7 +82,13 @@ const ProductDetail: React.FC = () => {
   }
 
   return (
-    <div className="bg-custom-background bg-cover bg-center min-h-screen p-8 text-white flex items-center justify-center">
+    <div className="bg-custom-background bg-cover bg-center min-h-screen p-8 text-white flex  items-center justify-center">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-20 lg:top-28 left-4 flex items-center text-lg text-custom-yellow hover:underline"
+      >
+        <span className="mr-2">&larr;</span> Back
+      </button>
       <div className="md:w-1/2 relative cursor-pointer" onClick={openModal}>
         <img
           src={image} // Use the dynamically imported image

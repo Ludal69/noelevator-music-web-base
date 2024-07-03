@@ -1,9 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
+import { useCart } from "../../context/CartContext";
 import logo from "../../assets/Images/no_elevator_gf_logo.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  toggleDrawer: (isOpen: boolean) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ toggleDrawer }) => {
+  const { state } = useCart();
+  const cartItemCount = state.items.reduce(
+    (count, item) => count + item.quantity,
+    0
+  );
+
   return (
     <header className="w-full bg-custom-blue text-custom-yellow fixed top-0 left-0 z-50 h-20 lg:h-24 border-b-2 border-custom-yellow">
       <div className="container mx-auto flex justify-between items-center px-4 h-full">
@@ -61,6 +74,19 @@ const Header: React.FC = () => {
             fgColor="#ffac49"
             bgColor="transparent"
           />
+        </div>
+        <div className="ml-auto flex items-center">
+          <button
+            onClick={() => toggleDrawer(true)}
+            className="relative text-xl focus:outline-none"
+          >
+            <FontAwesomeIcon icon={faShoppingCart} />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
+          </button>
         </div>
       </div>
     </header>
