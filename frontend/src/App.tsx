@@ -10,28 +10,33 @@ import Bio from "./pages/Bio/Bio";
 import Contact from "./pages/Contact/Contact";
 import Store from "./pages/Store/Store";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
+import CartDisplay from "./components/CartDisplay/CartDisplay"; // Add this import
+import { CartProvider } from "./context/CartContext"; // Add this import
 import "./index.css";
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <div className="App min-h-screen flex flex-col">
-        <Header />
-        <main className="pt-20 lg:pt-24 flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/media" element={<Media />} />
-            <Route path="/listen" element={<Listen />} />
-            <Route path="/shows" element={<Shows />} />
-            <Route path="/bio" element={<Bio />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/store" element={<Store />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <CartProvider>
+      <Router>
+        <div className="App min-h-screen flex flex-col">
+          <Header />
+          <main className="pt-20 lg:pt-24 flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/media" element={<Media />} />
+              <Route path="/listen" element={<Listen />} />
+              <Route path="/shows" element={<Shows />} />
+              <Route path="/bio" element={<Bio />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/store" element={<Store />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+        <CartDisplay /> {/* Add this to display cart contents */}
+      </Router>
+    </CartProvider>
   );
 };
 

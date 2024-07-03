@@ -1,8 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import merchRoutes from "./routes/merchRoutes";
 import contactRoutes from "./routes/contactRoutes";
+import cartRoutes from "./routes/cartRoutes"; // Importer les routes du panier
+import productRoutes from "./routes/productRoutes"; // Importer les routes des produits
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -24,7 +25,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Register routes
-app.use("/api/merch", merchRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/products", productRoutes);
 
 export default app;

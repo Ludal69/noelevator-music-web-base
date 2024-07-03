@@ -1,22 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
-import { allProducts, Product } from "../../data/products";
+import { getProductById } from "../../services/productService";
+import { useCart } from "../../context/CartContext";
+import { addToCart as apiAddToCart } from "../../services/cartService";
+
+// Utility function to dynamically import images
+const importImage = async (path: string) => {
+  try {
+    const image = await import(`../../assets/Images/${path}`);
+    return image.default;
+  } catch (error) {
+    console.error(`Failed to import image: ${path}`, error);
+    return "path/to/default/image.svg"; // Fallback image path
+  }
+};
 
 Modal.setAppElement("#root"); // Set root element for accessibility
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const product: Product | undefined = allProducts.find(
-    (product) => product.id === id
-  );
-
+  const [product, setProduct] = useState<any>(null);
+  const [image, setImage] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const { dispatch } = useCart();
 
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const fetchedProduct = await getProductById(id!);
+      setProduct(fetchedProduct);
+
+      if (fetchedProduct.imageUrl) {
+        const imageUrl = await importImage(fetchedProduct.imageUrl);
+        setImage(imageUrl);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -30,16 +52,34 @@ const ProductDetail: React.FC = () => {
     setSelectedSize(event.target.value);
   };
 
-  const handleAddToCart = () => {
-    // Implement add to cart functionality here
-    console.log("Added to cart:", product.title, selectedSize);
+  const handleAddToCart = async () => {
+    if (product) {
+      const cartItem = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: image, // Use the dynamically imported image
+        quantity: 1,
+        size: selectedSize,
+      };
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: cartItem,
+      });
+      // Add to cart in the backend
+      await apiAddToCart(product.id, 1);
+    }
   };
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="bg-custom-background bg-cover bg-center min-h-screen p-8 text-white flex items-center justify-center">
       <div className="md:w-1/2 relative cursor-pointer" onClick={openModal}>
         <img
-          src={product.image}
+          src={image} // Use the dynamically imported image
           alt={product.title}
           className="w-full h-full object-cover mb-4 md:mb-0 rounded"
         />
@@ -49,7 +89,7 @@ const ProductDetail: React.FC = () => {
       </div>
       <div className="md:w-1/2 md:pl-6 flex flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
-        <p className="text-2xl mb-4">{product.price}</p>
+        <p className="text-2xl mb-4">${product.price}</p>
         <p className="mb-4">{product.description}</p>
         <label className="block mb-2">
           <span className="text-white">Size:</span>
@@ -79,8 +119,8 @@ const ProductDetail: React.FC = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Product Image"
-        className="flex items-center justify-center h-full z-50" // Increased z-index
-        overlayClassName="fixed inset-0 bg-black bg-opacity-75 z-50" // Increased z-index
+        className="flex items-center justify-center h-full z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-75 z-50"
       >
         <div className="relative h-full w-full">
           <button
@@ -90,7 +130,7 @@ const ProductDetail: React.FC = () => {
             &times;
           </button>
           <img
-            src={product.image}
+            src={image} // Use the dynamically imported image
             alt={product.title}
             className="w-full h-full object-contain"
           />
