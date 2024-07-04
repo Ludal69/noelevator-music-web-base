@@ -16,12 +16,6 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Outfit", sans-serif; /* Utilisation de la police Outfit pour le corps du texte */
-  background-color: #0d2760; /* Couleur de fond globale */
-  color: #ffac49; /* Couleur du texte */
-}
-
 /* Classes utilitaires pour la police du logo */
 .font-logo {
   font-family: "Moon Get", sans-serif;
@@ -30,4 +24,21 @@ body {
 /* Classes utilitaires pour la police des titres */
 .font-titles {
   font-family: "Outfit", sans-serif;
+}
+
+body {
+  font-family: "Outfit", sans-serif; /* Utilisation de la police Outfit pour le corps du texte */
+  background-color: #0d2760; /* Couleur de fond globale */
+  color: #ffac49; /* Couleur du texte */
+}
+
+.drawer-open body {
+  transform: translateX(-20rem);
+}
+
+/* Header, Main, and Footer specific styles */
+.drawer-open header,
+.drawer-open main,
+.drawer-open footer {
+  transform: translateX(-20rem); /* Match the body shift */
 }

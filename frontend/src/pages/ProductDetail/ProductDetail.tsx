@@ -1,9 +1,11 @@
+// frontend/src/pages/ProductDetail/ProductDetail.tsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { getProductById } from "../../services/productService";
 import { useCart } from "../../context/CartContext";
 import { addToCart as apiAddToCart } from "../../services/cartService";
+import { useAuth } from "../../context/AuthContext";
 
 // Utility function to dynamically import images
 const importImage = async (path: string) => {
@@ -30,6 +32,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const { dispatch } = useCart();
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -60,7 +63,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   const handleAddToCart = async () => {
     if (product) {
       const cartItem = {
-        id: product.id,
+        id: product.id.toString(), // Convert the id to a string if it's not already
         title: product.title,
         price: product.price,
         image: image, // Use the dynamically imported image
@@ -71,8 +74,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
         type: "ADD_TO_CART",
         payload: cartItem,
       });
-      // Add to cart in the backend
-      await apiAddToCart(product.id, 1);
+      if (token) {
+        // Add to cart in the backend
+        await apiAddToCart(token, product.id.toString(), 1, selectedSize); // Convert id to string
+      }
       toggleDrawer(true); // Open the cart drawer
     }
   };

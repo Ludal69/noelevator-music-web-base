@@ -1,6 +1,8 @@
-import React from "react";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+// frontend/src/components/CartDrawer/CartDrawer.tsx
+import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -8,45 +10,64 @@ interface CartDrawerProps {
 }
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
-  const { state, dispatch } = useCart();
+  const { state } = useCart();
+  const { isAuthenticated, email, logout } = useAuth();
+  const navigate = useNavigate();
+  const [items, setItems] = useState(state.items);
 
-  const handleRemoveFromCart = (id: string) => {
-    dispatch({ type: "REMOVE_FROM_CART", payload: { id } });
+  useEffect(() => {
+    setItems(state.items);
+  }, [state.items]);
+
+  const handleLogout = () => {
+    logout();
+    setItems([]); // Clear local state on logout
+    navigate("/"); // Redirect to home after logout
   };
 
   return (
-    <SwipeableDrawer
-      anchor="right"
-      open={isOpen}
-      onClose={() => toggleDrawer(false)}
-      onOpen={() => toggleDrawer(true)}
+    <div
+      className={`fixed inset-y-0 right-0 transform ${
+        isOpen ? "translate-x-0" : "translate-x-full"
+      } bg-white w-80 p-4 shadow-lg z-50`}
     >
-      <div className="w-80 p-4">
-        <h2 className="text-xl font-bold mb-2">Cart Items</h2>
-        {state.items.length === 0 ? (
-          <p>No items in the cart.</p>
+      <h2 className="text-2xl font-bold mb-4">Cart</h2>
+      {items.length === 0 ? (
+        <p>No items in the cart.</p>
+      ) : (
+        <ul>
+          {items.map((item) => (
+            <li key={item.id} className="mb-2">
+              <strong>{item.title}</strong> - {item.size} - ${item.price} x{" "}
+              {item.quantity}
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="space-y-4 mt-4">
+        {!isAuthenticated ? (
+          <>
+            <Link to="/login" className="btn btn-primary">
+              Identifiez-vous
+            </Link>
+            <br />
+            <Link to="/signup" className="btn btn-secondary">
+              Nouveau client ? Commencer ici.
+            </Link>
+          </>
         ) : (
-          <ul>
-            {state.items.map((item) => (
-              <li key={item.id} className="mb-2">
-                <div className="flex justify-between">
-                  <span>
-                    <strong>{item.title}</strong> - {item.size} - ${item.price}{" "}
-                    x {item.quantity}
-                  </span>
-                  <button
-                    onClick={() => handleRemoveFromCart(item.id)}
-                    className="text-red-500"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <>
+            <p className="text-sm mb-2">Bonjour, {email}</p>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded mt-4"
+            >
+              Sign Out
+            </button>
+          </>
         )}
       </div>
-    </SwipeableDrawer>
+    </div>
   );
 };
 

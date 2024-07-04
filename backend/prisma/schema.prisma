@@ -12,7 +12,7 @@ model User {
   email    String     @unique
   password String
   cart     CartItem[]
-  orders   Order[] // Added relation field
+  orders   Order[]
 
   @@map(name: "users")
 }
@@ -28,6 +28,8 @@ model Product {
   updatedAt   DateTime  @updatedAt
 
   cartItems   CartItem[]
+  orderItems  OrderItem[]
+
   @@map(name: "products")
 }
 
@@ -39,23 +41,33 @@ model CartItem {
   size      String
   product   Product  @relation(fields: [productId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
-  order     Order?   @relation(fields: [orderId], references: [id])
-  orderId   String?
-
+  
   @@unique([productId, userId, size])
   @@map(name: "cart_items")
 }
 
 model Order {
-  id            String    @id
-  userId        String
-  user          User      @relation(fields: [userId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  status        String
-  cartItems     CartItem[]
+  id        String    @id
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  status    String
+  items     OrderItem[]
 
   @@map(name: "orders")
+}
+
+model OrderItem {
+  id        String   @id
+  orderId   String
+  productId String
+  quantity  Int
+  size      String
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map(name: "order_items")
 }
 
 model ContactMessage {
@@ -65,5 +77,5 @@ model ContactMessage {
   message   String
   createdAt DateTime @default(now())
 
-  @@map(name: "contact_messages")  // Nom spécifique pour la table
+  @@map(name: "contact_messages")
 }

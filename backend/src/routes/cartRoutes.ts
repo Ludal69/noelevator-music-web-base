@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { CartController } from "../controllers/cartController";
-import { authenticateToken } from "../middleware/authenticateToken";
+import authenticateToken from "../middleware/authenticateToken";
 
 const router = Router();
 const cartController = new CartController();

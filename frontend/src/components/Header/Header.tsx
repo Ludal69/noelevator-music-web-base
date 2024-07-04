@@ -1,3 +1,4 @@
+// frontend/src/components/Header/Header.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
@@ -8,9 +9,10 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 interface HeaderProps {
   toggleDrawer: (isOpen: boolean) => void;
+  drawerOpen: boolean; // Add drawerOpen prop to check the drawer state
 }
 
-const Header: React.FC<HeaderProps> = ({ toggleDrawer }) => {
+const Header: React.FC<HeaderProps> = ({ toggleDrawer, drawerOpen }) => {
   const { state } = useCart();
   const cartItemCount = state.items.reduce(
     (count, item) => count + item.quantity,
@@ -50,34 +52,42 @@ const Header: React.FC<HeaderProps> = ({ toggleDrawer }) => {
           </Link>
         </div>
         <div className="flex space-x-4 w-2/5 justify-center items-center h-full">
-          <SocialIcon
-            url="https://facebook.com"
-            style={{ height: 50, width: 50 }}
-            fgColor="#ffac49"
-            bgColor="transparent"
-          />
-          <SocialIcon
-            url="https://instagram.com"
-            style={{ height: 50, width: 50 }}
-            fgColor="#ffac49"
-            bgColor="transparent"
-          />
-          <SocialIcon
-            url="https://twitch.tv"
-            style={{ height: 50, width: 50 }}
-            fgColor="#ffac49"
-            bgColor="transparent"
-          />
-          <SocialIcon
-            url="https://tiktok.com"
-            style={{ height: 50, width: 50 }}
-            fgColor="#ffac49"
-            bgColor="transparent"
-          />
+          <div>
+            <SocialIcon
+              url="https://facebook.com"
+              style={{ height: 50, width: 50 }}
+              fgColor="#ffac49"
+              bgColor="transparent"
+            />
+          </div>
+          <div>
+            <SocialIcon
+              url="https://instagram.com"
+              style={{ height: 50, width: 50 }}
+              fgColor="#ffac49"
+              bgColor="transparent"
+            />
+          </div>
+          <div>
+            <SocialIcon
+              url="https://twitch.tv"
+              style={{ height: 50, width: 50 }}
+              fgColor="#ffac49"
+              bgColor="transparent"
+            />
+          </div>
+          <div>
+            <SocialIcon
+              url="https://tiktok.com"
+              style={{ height: 50, width: 50 }}
+              fgColor="#ffac49"
+              bgColor="transparent"
+            />
+          </div>
         </div>
         <div className="ml-auto flex items-center">
           <button
-            onClick={() => toggleDrawer(true)}
+            onClick={() => toggleDrawer(!drawerOpen)} // Toggle drawer based on current state
             className="relative text-xl focus:outline-none"
           >
             <FontAwesomeIcon icon={faShoppingCart} />

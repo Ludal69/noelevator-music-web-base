@@ -1,14 +1,61 @@
+// backend/src/controllers/userController.ts
 import { Request, Response } from "express";
-import db, { genId } from "../modules/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import db, { genId } from "../../src/modules/db";
+
+const saltRounds = 10;
 
 export class UserController {
-  async signup(req: Request, res: Response) {
+  async login(req: Request, res: Response) {
     const { email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
+      const user = await db.user.findUnique({ where: { email } });
+
+      if (!user) {
+        return res.status(401).json({ error: "Email not found" });
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: "Invalid password" });
+      }
+
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
+        expiresIn: "1h",
+      });
+
+      res.json({ token });
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred during login" });
+    }
+  }
+
+  async checkEmail(req: Request, res: Response) {
+    const { email } = req.body;
+
+    try {
+      const user = await db.user.findUnique({ where: { email } });
+
+      if (!user) {
+        return res.status(404).json({ exists: false });
+      }
+
+      res.json({ exists: true });
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred while checking email" });
+    }
+  }
+
+  // Nouvelle méthode pour créer un utilisateur avec un mot de passe haché
+  async createUser(req: Request, res: Response) {
+    const { email, password } = req.body;
+
+    try {
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
       const user = await db.user.create({
         data: {
           id: genId(),
@@ -16,31 +63,10 @@ export class UserController {
           password: hashedPassword,
         },
       });
-      res.status(201).json({ message: "User created", data: user });
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  }
 
-  async login(req: Request, res: Response) {
-    const { email, password } = req.body;
-
-    try {
-      const user = await db.user.findUnique({
-        where: { email },
-      });
-
-      if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-        expiresIn: "1h",
-      });
-
-      res.json({ message: "Login successful", token });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred during user creation" });
     }
   }
 }

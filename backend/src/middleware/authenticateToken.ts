@@ -1,18 +1,28 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { CustomRequest } from "../types";
 
-export const authenticateToken = (
+interface CustomRequest extends Request {
+  user?: { id: string; email: string; name?: string };
+}
+
+const authenticateToken = (
   req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers["authorization"];
-  if (!token) return res.sendStatus(401);
+  const token = req.header("Authorization")?.split(" ")[1];
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, (err: any, user: any) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
+  if (!token) {
+    return res.status(401).json({ message: "Access Denied" });
+  }
+
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET as string);
+    req.user = verified as { id: string; email: string; name?: string };
     next();
-  });
+  } catch (err) {
+    res.status(400).json({ message: "Invalid Token" });
+  }
 };
+
+export default authenticateToken;

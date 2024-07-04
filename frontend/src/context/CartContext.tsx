@@ -1,3 +1,4 @@
+// frontend/src/context/CartContext.tsx
 import React, {
   createContext,
   useReducer,
@@ -5,9 +6,12 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { useAuth } from "./AuthContext";
 import {
   addToCart as apiAddToCart,
   getCartItems,
+  updateCartItem as apiUpdateCartItem,
+  removeFromCart as apiRemoveFromCart,
 } from "../services/cartService";
 
 // Define the shape of a cart item
@@ -37,11 +41,12 @@ type Action =
 
 // Initial state for the cart
 const initialState: CartState = {
-  items: [],
+  items: JSON.parse(localStorage.getItem("cartItems") || "[]"),
 };
 
 // Define the cart reducer
 const cartReducer = (state: CartState, action: Action): CartState => {
+  let updatedItems;
   switch (action.type) {
     case "SET_CART_ITEMS":
       return {
@@ -49,37 +54,29 @@ const cartReducer = (state: CartState, action: Action): CartState => {
         items: action.payload,
       };
     case "ADD_TO_CART":
-      const existingItemIndex = state.items.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (existingItemIndex >= 0) {
-        const updatedItems = [...state.items];
-        updatedItems[existingItemIndex] = {
-          ...updatedItems[existingItemIndex],
-          quantity:
-            updatedItems[existingItemIndex].quantity + action.payload.quantity,
-        };
-        return {
-          ...state,
-          items: updatedItems,
-        };
-      } else {
-        return {
-          ...state,
-          items: [...state.items, action.payload],
-        };
-      }
-    case "REMOVE_FROM_CART":
+      updatedItems = [...state.items, action.payload];
+      localStorage.setItem("cartItems", JSON.stringify(updatedItems));
       return {
         ...state,
-        items: state.items.filter((item) => item.id !== action.payload.id),
+        items: updatedItems,
+      };
+    case "REMOVE_FROM_CART":
+      updatedItems = state.items.filter(
+        (item) => item.id !== action.payload.id
+      );
+      localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+      return {
+        ...state,
+        items: updatedItems,
       };
     case "UPDATE_CART_ITEM":
+      updatedItems = state.items.map((item) =>
+        item.id === action.payload.id ? { ...item, ...action.payload } : item
+      );
+      localStorage.setItem("cartItems", JSON.stringify(updatedItems));
       return {
         ...state,
-        items: state.items.map((item) =>
-          item.id === action.payload.id ? { ...item, ...action.payload } : item
-        ),
+        items: updatedItems,
       };
     default:
       return state;
@@ -103,19 +100,27 @@ interface CartProviderProps {
 // CartProvider component to provide cart context to the app
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await getCartItems();
-        dispatch({ type: "SET_CART_ITEMS", payload: response });
+        if (token) {
+          const response = await getCartItems(token);
+          dispatch({ type: "SET_CART_ITEMS", payload: response });
+        } else {
+          dispatch({
+            type: "SET_CART_ITEMS",
+            payload: JSON.parse(localStorage.getItem("cartItems") || "[]"),
+          });
+        }
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
       }
     };
 
     fetchCartItems();
-  }, []);
+  }, [token]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>

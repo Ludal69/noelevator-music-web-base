@@ -1,4 +1,5 @@
 import db, { genId } from "../../src/modules/db";
+import bcrypt from "bcrypt";
 
 const userId = genId();
 const productIds = {
@@ -7,14 +8,18 @@ const productIds = {
   poster: genId(),
   vinyl: genId(),
 };
+const orderId = genId();
 
 const run = async () => {
-  // Create a user
+  // Hash the password
+  const hashedPassword = await bcrypt.hash("password123", 10);
+
+  // Create a user with hashed password
   await db.user.create({
     data: {
       id: userId,
       email: "user@example.com",
-      password: "password123", // Note: In a real application, make sure to hash the password
+      password: hashedPassword,
     },
   });
 
@@ -105,12 +110,49 @@ const run = async () => {
       // Add more cart items here as needed
     ],
   });
+
+  // Create an order
+  await db.order.create({
+    data: {
+      id: orderId,
+      userId: userId,
+      status: "pending",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
+
+  // Create order items and associate with the order
+  await db.orderItem.createMany({
+    data: [
+      {
+        id: genId(),
+        orderId: orderId,
+        productId: productIds.tshirt,
+        quantity: 1,
+        size: "M",
+      },
+      {
+        id: genId(),
+        orderId: orderId,
+        productId: productIds.hoodie,
+        quantity: 1,
+        size: "L",
+      },
+      // Add more order items here as needed
+    ],
+  });
 };
 
 // Auto-run if main script (not imported)
 if (require.main === module) {
-  run().then(() => {
-    console.log("Data seed complete");
-    process.exit();
-  });
+  run()
+    .then(() => {
+      console.log("Data seed complete");
+      process.exit();
+    })
+    .catch((error) => {
+      console.error("Data seed failed:", error);
+      process.exit(1);
+    });
 }
