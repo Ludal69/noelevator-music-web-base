@@ -31,7 +31,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   const [image, setImage] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
-  const { dispatch } = useCart();
+  const { state, dispatch } = useCart();
   const { token } = useAuth();
 
   useEffect(() => {
@@ -63,9 +63,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   const handleAddToCart = async () => {
     if (product) {
       const cartItem = {
-        id: product.id.toString(), // Convert the id to a string if it's not already
+        id: product.id.toString(),
         productId: product.id,
-        userId: "", // This should be filled with the actual user ID if available. Ajouté dans le back si Token ? 
+        userId: "", // This should be filled with the actual user ID if available. Ajouté dans le back si Token ?
         quantity: 1,
         size: selectedSize,
         product: {
@@ -73,14 +73,39 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
           imageUrl: image, // Use the dynamically imported image
         },
       };
-      dispatch({
-        type: "ADD_TO_CART",
-        payload: cartItem,
-      });
+
+      const existingCartItemIndex = state.items.findIndex(
+        (item) =>
+          item.productId === cartItem.productId && item.size === cartItem.size
+      );
+
+      if (existingCartItemIndex > -1) {
+        const existingCartItem = state.items[existingCartItemIndex];
+        const updatedCartItem = {
+          ...existingCartItem,
+          quantity: existingCartItem.quantity + 1,
+        };
+
+        dispatch({
+          type: "UPDATE_CART_ITEM",
+          payload: {
+            id: existingCartItem.id,
+            quantity: updatedCartItem.quantity,
+            size: updatedCartItem.size,
+          },
+        });
+      } else {
+        dispatch({
+          type: "ADD_TO_CART",
+          payload: cartItem,
+        });
+      }
+
       if (token) {
         // Add to cart in the backend
         await apiAddToCart(token, product.id.toString(), 1, selectedSize); // Convert id to string
       }
+
       toggleDrawer(true); // Open the cart drawer
     }
   };
