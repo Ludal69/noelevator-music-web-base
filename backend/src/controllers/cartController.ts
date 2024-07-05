@@ -23,8 +23,18 @@ export class CartController {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
+    if (!productId) {
+      return res.status(400).json({ error: "Product ID is required" });
+    }
+
     const existingCartItem = await db.cartItem.findUnique({
-      where: { productId_userId_size: { productId, userId, size } },
+      where: {
+        productId_userId_size: {
+          productId,
+          userId,
+          size,
+        },
+      },
     });
 
     if (existingCartItem) {

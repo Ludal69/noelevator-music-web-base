@@ -1,5 +1,4 @@
-// frontend/src/components/CartDrawer/CartDrawer.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,10 +13,32 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
   const { isAuthenticated, email, logout } = useAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState(state.items);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setItems(state.items);
   }, [state.items]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        drawerRef.current &&
+        !drawerRef.current.contains(event.target as Node)
+      ) {
+        toggleDrawer(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpen, toggleDrawer]);
 
   const handleLogout = () => {
     logout();
@@ -27,6 +48,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
 
   return (
     <div
+      ref={drawerRef}
       className={`fixed inset-y-0 right-0 transform ${
         isOpen ? "translate-x-0" : "translate-x-full"
       } bg-white w-80 p-4 shadow-lg z-50`}
@@ -36,8 +58,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
         <p>No items in the cart.</p>
       ) : (
         <ul>
-          {items.map((item) => (
-            <li key={item.id} className="mb-2">
+          {items.map((item, index) => (
+            <li key={`${item.id}-${index}`} className="mb-2">
               <strong>{item.title}</strong> - {item.size} - ${item.price} x{" "}
               {item.quantity}
             </li>
