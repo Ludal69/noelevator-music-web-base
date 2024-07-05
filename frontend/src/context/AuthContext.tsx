@@ -1,11 +1,10 @@
-// frontend/src/context/AuthContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import axios from "axios";
-import { useCart } from "./CartContext"; // Import useCart
+import { useCart } from "./CartContext";
 import {
   getCartItems,
   addToCart as apiAddToCart,
-} from "../services/cartService"; // Import getCartItems and apiAddToCart
+} from "../services/cartService";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -28,7 +27,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [email, setEmail] = useState<string | null>(
     localStorage.getItem("email")
   );
-  const { dispatch } = useCart(); // Get dispatch from useCart
+  const { dispatch } = useCart();
 
   const mergeCarts = async (
     localCartItems: any[],
@@ -94,6 +93,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setEmail(null);
     localStorage.removeItem("token");
     localStorage.removeItem("email");
+    localStorage.removeItem("cartItems"); // Clear local storage cart
     dispatch({ type: "SET_CART_ITEMS", payload: [] }); // Clear cart items
   };
 
