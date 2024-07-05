@@ -60,8 +60,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
         <ul>
           {items.map((item, index) => (
             <li key={`${item.id}-${index}`} className="mb-2">
-              <strong>{item.title}</strong> - {item.size} - ${item.price} x{" "}
-              {item.quantity}
+              <strong>{item.product.title}</strong> - {item.size} - $
+              {item.product.price} x {item.quantity}
             </li>
           ))}
         </ul>

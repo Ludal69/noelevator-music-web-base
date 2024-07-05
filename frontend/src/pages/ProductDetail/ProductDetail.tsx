@@ -1,4 +1,3 @@
-// frontend/src/pages/ProductDetail/ProductDetail.tsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
@@ -6,6 +5,7 @@ import { getProductById } from "../../services/productService";
 import { useCart } from "../../context/CartContext";
 import { addToCart as apiAddToCart } from "../../services/cartService";
 import { useAuth } from "../../context/AuthContext";
+import { Product } from "../../types"; // Import the Product type
 
 // Utility function to dynamically import images
 const importImage = async (path: string) => {
@@ -27,7 +27,7 @@ interface ProductDetailProps {
 const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [image, setImage] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -64,11 +64,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
     if (product) {
       const cartItem = {
         id: product.id.toString(), // Convert the id to a string if it's not already
-        title: product.title,
-        price: product.price,
-        image: image, // Use the dynamically imported image
+        productId: product.id,
+        userId: "", // This should be filled with the actual user ID if available. Ajouté dans le back si Token ? 
         quantity: 1,
         size: selectedSize,
+        product: {
+          ...product,
+          imageUrl: image, // Use the dynamically imported image
+        },
       };
       dispatch({
         type: "ADD_TO_CART",

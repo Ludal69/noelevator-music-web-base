@@ -13,8 +13,8 @@ const CartDisplay: React.FC = () => {
         <ul>
           {state.items.map((item) => (
             <li key={item.id} className="mb-2">
-              <strong>{item.title}</strong> - {item.size} - ${item.price} x{" "}
-              {item.quantity}
+              <strong>{item.product.title}</strong> - {item.size} - $
+              {item.product.price} x {item.quantity}
             </li>
           ))}
         </ul>

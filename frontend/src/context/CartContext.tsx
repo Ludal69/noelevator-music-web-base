@@ -1,4 +1,3 @@
-// frontend/src/context/CartContext.tsx
 import React, {
   createContext,
   useReducer,
@@ -7,22 +6,8 @@ import React, {
   useEffect,
 } from "react";
 import { useAuth } from "./AuthContext";
-import {
-  addToCart as apiAddToCart,
-  getCartItems,
-  updateCartItem as apiUpdateCartItem,
-  removeFromCart as apiRemoveFromCart,
-} from "../services/cartService";
-
-// Define the shape of a cart item
-interface CartItem {
-  id: string;
-  title: string;
-  price: number;
-  size?: string;
-  image: string;
-  quantity: number;
-}
+import { getCartItems } from "../services/cartService";
+import { CartItem } from "../types"; // Import the CartItem type
 
 // Define the shape of the cart context state
 interface CartState {
