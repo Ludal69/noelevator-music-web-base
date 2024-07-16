@@ -56,6 +56,10 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
     navigate("/"); // Redirect to home after logout
   };
 
+  const handleLinkClick = () => {
+    toggleDrawer(false);
+  };
+
   return (
     <div
       ref={drawerRef}
@@ -85,11 +89,19 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
       <div className="space-y-4 mt-4">
         {!isAuthenticated ? (
           <>
-            <Link to="/login" className="btn btn-primary">
+            <Link
+              to="/login"
+              className="btn btn-primary"
+              onClick={handleLinkClick}
+            >
               Identifiez-vous
             </Link>
             <br />
-            <Link to="/signup" className="btn btn-secondary">
+            <Link
+              to="/signup"
+              className="btn btn-secondary"
+              onClick={handleLinkClick}
+            >
               Nouveau client ? Commencer ici.
             </Link>
           </>
