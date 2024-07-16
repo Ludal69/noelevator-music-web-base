@@ -9,22 +9,22 @@ interface Photo {
 const photos: Photo[] = [
   {
     id: "photo_1",
-    url: require("../../assets/Images/Bateau_El_Alamein.jpg"),
+    url: require("../../assets/images/Bateau_El_Alamein.jpg"),
     alt: "Bateau_El_Alamein",
   },
   {
     id: "photo_2",
-    url: require("../../assets/Images/Bus Palladium.jpg"),
+    url: require("../../assets/images/Bus Palladium.jpg"),
     alt: "Bus Palladium",
   },
   {
     id: "photo_3",
-    url: require("../../assets/Images/Residence.jpg"),
+    url: require("../../assets/images/Residence.jpg"),
     alt: "Residence",
   },
   {
     id: "photo_4",
-    url: require("../../assets/Images/background.jpg"),
+    url: require("../../assets/images/background.jpg"),
     alt: "background",
   },
   // Ajouter d'autres photos ici

@@ -1,13 +1,13 @@
 import React from "react";
-import spotifyLogo from "../../assets/logo_services/spotify.svg";
-import groundFloorLogo from "../../assets/Images/no_elevator_gf_logo.svg"; // Utiliser import ici
-import appleMusicLogo from "../../assets/logo_services/apple-music.svg";
-import deezerLogo from "../../assets/logo_services/deezer.svg";
-import soundcloudLogo from "../../assets/logo_services/soundcloud.svg";
-import youtubeLogo from "../../assets/logo_services/youtube.svg";
-import bandcampLogo from "../../assets/logo_services/bandcamp.svg";
+import spotifyLogo from "../../assets/images/logo_services/spotify.svg";
+import groundFloorLogo from "../../assets/images/no_elevator_gf_logo.svg"; // Utiliser import ici
+import appleMusicLogo from "../../assets/images/logo_services/apple-music.svg";
+import deezerLogo from "../../assets/images/logo_services/deezer.svg";
+import soundcloudLogo from "../../assets/images/logo_services/soundcloud.svg";
+import youtubeLogo from "../../assets/images/logo_services/youtube.svg";
+import bandcampLogo from "../../assets/images/logo_services/bandcamp.svg";
 
-const groundFloorFront = require("../../assets/Images/ground_floor_front.jpg");
+const groundFloorFront = require("../../assets/images/ground_floor_front.jpg");
 
 const Listen: React.FC = () => {
   return (

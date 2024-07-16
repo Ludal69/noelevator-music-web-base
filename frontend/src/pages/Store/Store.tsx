@@ -7,16 +7,16 @@ import { Product } from "../../types";
 // Utility function to dynamically import images
 const importImage = async (path: string) => {
   try {
-    const image = await import(`../../assets/Images/${path}`);
+    const image = await import(`../../assets/images/store/${path}`);
     return image.default;
   } catch (error) {
     console.error(`Failed to import image: ${path}`, error);
-    return "path/to/default/image.svg"; // Fallback image path
+    return "../../assets/images/store/question_mark.png"; // Fallback image path
   }
 };
 
 const Store: React.FC = () => {
-  const productsPerPage = 24;
+  const productsPerPage = 6;
   const [products, setProducts] = useState<Product[]>([]);
   const [visibleProducts, setVisibleProducts] = useState(productsPerPage);
   const [images, setImages] = useState<{ [key: string]: string }>({});

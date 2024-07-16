@@ -12,7 +12,7 @@ const showsData = [
 
     mapLink: "https://maps.app.goo.gl/ZmUnYyjNMBQSf9k57",
     facebookEvent: "https://fb.me/e/2KkDlXbYv",
-    poster: require("../../assets/posters/truskel_2020.png"),
+    poster: require("../../assets/images/posters/truskel_2020.png"),
     timestamp: moment("2020-02-20 20:00", "YYYY-MM-DD HH:mm").unix(),
   },
   {
@@ -24,7 +24,7 @@ const showsData = [
 
     mapLink: "https://maps.app.goo.gl/TedKiUjBPr58s1E58",
     facebookEvent: "https://fb.me/e/1NuhKe47i",
-    poster: require("../../assets/posters/ambuscade_2021.jpg"),
+    poster: require("../../assets/images/posters/ambuscade_2021.jpg"),
     timestamp: moment("2021-11-07 20:00", "YYYY-MM-DD HH:mm").unix(),
   },
   {
@@ -36,7 +36,7 @@ const showsData = [
 
     mapLink: "https://maps.app.goo.gl/ZmUnYyjNMBQSf9k57",
     facebookEvent: "https://fb.me/e/19GPJ9zzW",
-    poster: require("../../assets/posters/truskel_2021.png"),
+    poster: require("../../assets/images/posters/truskel_2021.png"),
     timestamp: moment("2021-12-01 20:00", "YYYY-MM-DD HH:mm").unix(),
   },
   {
@@ -48,7 +48,7 @@ const showsData = [
 
     mapLink: "https://maps.app.goo.gl/arMhKdDU6jxTivws8",
     facebookEvent: "https://fb.me/e/2NF25gxXE",
-    poster: require("../../assets/posters/scandle_2022.png"),
+    poster: require("../../assets/images/posters/scandle_2022.png"),
     timestamp: moment("2022-01-12 20:00", "YYYY-MM-DD HH:mm").unix(),
   },
   {
@@ -60,7 +60,7 @@ const showsData = [
 
     mapLink: "https://maps.app.goo.gl/EX4TyaGdpB5zHScT9",
     facebookEvent: "https://fb.me/e/1BG4yIXdi",
-    poster: require("../../assets/posters/foisonnante_2022.png"),
+    poster: require("../../assets/images/posters/foisonnante_2022.png"),
     timestamp: moment("2022-02-16 20:00", "YYYY-MM-DD HH:mm").unix(),
   },
 ];

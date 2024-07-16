@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
 import { useCart } from "../../context/CartContext";
-import logo from "../../assets/Images/no_elevator_gf_logo.svg";
+import logo from "../../assets/images/no_elevator_gf_logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 

@@ -10,7 +10,7 @@ import { Product } from "../../types"; // Import the Product type
 // Utility function to dynamically import images
 const importImage = async (path: string) => {
   try {
-    const image = await import(`../../assets/Images/${path}`);
+    const image = await import(`../../assets/images/store/${path}`);
     return image.default;
   } catch (error) {
     console.error(`Failed to import image: ${path}`, error);
