@@ -51,6 +51,7 @@ const Login: React.FC = () => {
     try {
       await login(email, password);
       navigate("/");
+      window.location.reload(); //brute force reload to see new merged cart items in cart
     } catch (error: any) {
       setError("Mot de passe incorrect");
       setPassword(""); // Vider le champ de mot de passe en cas d'erreur
