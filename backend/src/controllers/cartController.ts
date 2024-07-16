@@ -1,3 +1,5 @@
+// backend/src/controllers/cartController.ts
+
 import { Response } from "express";
 import db, { genId } from "../modules/db";
 import { CustomRequest } from "../types";
@@ -67,7 +69,12 @@ export class CartController {
     }
 
     try {
-      await db.cartItem.delete({ where: { id } });
+      await db.cartItem.delete({
+        where: {
+          id,
+          userId,
+        },
+      });
       res.json({ message: "Cart item deleted" });
     } catch (error: any) {
       res.status(500).json({ error: error.message });

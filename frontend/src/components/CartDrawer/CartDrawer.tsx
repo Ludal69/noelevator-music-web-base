@@ -1,7 +1,10 @@
+// frontend/src/components/CartDrawer/CartDrawer.tsx
+
 import React, { useState, useEffect, useRef } from "react";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { removeFromCart as apiRemoveFromCart } from "../../services/cartService";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -9,8 +12,8 @@ interface CartDrawerProps {
 }
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
-  const { state } = useCart();
-  const { isAuthenticated, email, logout } = useAuth();
+  const { state, dispatch } = useCart();
+  const { isAuthenticated, email, logout, token } = useAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState(state.items);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +43,13 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
     };
   }, [isOpen, toggleDrawer]);
 
+  const handleRemove = async (id: string) => {
+    if (isAuthenticated && token) {
+      await apiRemoveFromCart(token, id);
+    }
+    dispatch({ type: "REMOVE_FROM_CART", payload: { id } });
+  };
+
   const handleLogout = () => {
     logout();
     setItems([]); // Clear local state on logout
@@ -62,6 +72,12 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
             <li key={`${item.id}-${index}`} className="mb-2">
               <strong>{item.product.title}</strong> - {item.size} - $
               {item.product.price} x {item.quantity}
+              <button
+                onClick={() => handleRemove(item.id)}
+                className="ml-4 text-red-500"
+              >
+                Remove
+              </button>
             </li>
           ))}
         </ul>
