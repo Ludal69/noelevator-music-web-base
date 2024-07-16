@@ -42,7 +42,7 @@ export class CartController {
     if (existingCartItem) {
       const updatedCartItem = await db.cartItem.update({
         where: { id: existingCartItem.id },
-        data: { quantity: existingCartItem.quantity + quantity },
+        data: { quantity: quantity },
         include: { product: true },
       });
       res.json({ message: "Cart item updated", data: updatedCartItem });

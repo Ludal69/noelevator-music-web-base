@@ -34,7 +34,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     serverCartItems: any[],
     token: string
   ) => {
-    const allItems = [...serverCartItems];
     for (const localItem of localCartItems) {
       const matchingItem = serverCartItems.find(
         (item) =>
@@ -48,7 +47,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           newQuantity,
           localItem.size
         );
-        matchingItem.quantity = newQuantity;
       } else {
         await apiAddToCart(
           token,
@@ -56,10 +54,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           localItem.quantity,
           localItem.size
         );
-        allItems.push(localItem);
       }
     }
-    return allItems;
   };
 
   const login = async (email: string, password: string) => {
@@ -78,12 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
     const serverCartItems = await getCartItems(token);
 
-    const mergedCartItems = await mergeCarts(
-      localCartItems,
-      serverCartItems,
-      token
-    );
-    dispatch({ type: "SET_CART_ITEMS", payload: mergedCartItems });
+    await mergeCarts(localCartItems, serverCartItems, token);
 
     localStorage.removeItem("cartItems"); // Clear local storage cart after merging
   };
