@@ -34,21 +34,28 @@ export class UserController {
   }
 
   async checkEmail(req: Request, res: Response) {
-    const { email } = req.body;
+    const { email, context } = req.body; // context can be 'login' or 'signup'
 
     try {
       const user = await db.user.findUnique({ where: { email } });
 
-      if (!user) {
-        return res.status(404).json({ exists: false });
+      if (context === "login") {
+        if (!user) {
+          return res.status(400).json({ error: "Email not found" });
+        }
+        res.json({ message: "Email exists" });
+      } else if (context === "signup") {
+        if (user) {
+          return res.status(400).json({ error: "Email already in use" });
+        }
+        res.json({ message: "Email available" });
+      } else {
+        res.status(400).json({ error: "Invalid context" });
       }
-
-      res.json({ exists: true });
     } catch (error) {
       res.status(500).json({ error: "An error occurred while checking email" });
     }
   }
-
   // Nouvelle méthode pour créer un utilisateur avec un mot de passe haché
   async createUser(req: Request, res: Response) {
     const { email, password } = req.body;

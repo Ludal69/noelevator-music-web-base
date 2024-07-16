@@ -1,9 +1,9 @@
-// frontend/src/pages/Login/Login.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import EmailValidation from "../../components/EmailValidation/EmailValidation";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -11,37 +11,12 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isEmailValid, setIsEmailValid] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState<boolean | null>(null);
 
-  const handleEmailValidation = async () => {
-    setError(null);
-    try {
-      const response = await fetch(
-        "http://localhost:4000/api/users/check-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
-      const data = await response.json();
-      if (data.exists) {
-        setIsEmailValid(true);
-      } else {
-        setIsEmailValid(false);
-        setEmail("");
-        setError(
-          "Adresse e-mail incorrecte ou invalide. Veuillez corriger avant de réessayer."
-        );
-      }
-    } catch (error) {
-      setIsEmailValid(false);
-      setEmail("");
-      setError("Une erreur est survenue lors de la vérification de l'email.");
-    }
+  const handleEmailValid = (email: string) => {
+    setEmail(email);
+    setIsEmailValid(true);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -63,27 +38,7 @@ const Login: React.FC = () => {
       <h1 className="text-4xl font-bold mb-4">Login</h1>
       <form onSubmit={handleLogin}>
         {isEmailValid === null && (
-          <div className="mb-4">
-            <label className="block text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-            {error && <p className="text-red-500 text-xs italic">{error}</p>}
-            <button
-              type="button"
-              onClick={handleEmailValidation}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded mt-4"
-            >
-              Continuer
-            </button>
-          </div>
+          <EmailValidation onEmailValid={handleEmailValid} context="login" />
         )}
         {isEmailValid && (
           <>
@@ -122,29 +77,6 @@ const Login: React.FC = () => {
           </>
         )}
       </form>
-      {isEmailValid === false && (
-        <div className="mt-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-          {error && <p className="text-red-500 text-xs italic">{error}</p>}
-          <button
-            type="button"
-            onClick={handleEmailValidation}
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded mt-4"
-          >
-            Continuer
-          </button>
-        </div>
-      )}
     </div>
   );
 };

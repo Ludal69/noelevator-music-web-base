@@ -51,6 +51,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, toggleDrawer }) => {
   };
 
   const handleLogout = () => {
+    toggleDrawer(false);
     logout();
     setItems([]); // Clear local state on logout
     navigate("/"); // Redirect to home after logout

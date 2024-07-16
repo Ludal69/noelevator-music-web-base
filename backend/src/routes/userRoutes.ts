@@ -7,5 +7,6 @@ const userController = new UserController();
 // router.post("/signup", userController.signup.bind(userController));//TODO:
 router.post("/login", userController.login.bind(userController));
 router.post("/check-email", userController.checkEmail); // Nouvelle route pour vérifier l'email
+router.post("/signup", userController.createUser.bind(userController));
 
 export default router;
