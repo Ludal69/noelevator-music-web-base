@@ -115,18 +115,21 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
   }
 
   return (
-    <div className="bg-custom-background bg-cover bg-center min-h-screen p-8 text-white flex  items-center justify-center">
+    <div className="bg-custom-background bg-cover bg-center min-h-screen p-8 text-white flex items-center justify-center">
       <button
         onClick={() => navigate(-1)}
         className="absolute top-20 lg:top-28 left-4 flex items-center text-lg text-custom-yellow hover:underline"
       >
         <span className="mr-2">&larr;</span> Back
       </button>
-      <div className="md:w-1/2 relative cursor-pointer" onClick={openModal}>
+      <div
+        className="md:w-1/2 relative flex items-center justify-center cursor-pointer"
+        onClick={openModal}
+      >
         <img
           src={image} // Use the dynamically imported image
           alt={product.title}
-          className="w-full h-full object-cover mb-4 md:mb-0 rounded"
+          className="max-h-[80vh] object-contain mb-4 md:mb-0 rounded"
         />
         <div className="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 z-20">
           <span className="text-white text-lg">Click to enlarge</span>
@@ -167,7 +170,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
         className="flex items-center justify-center h-full z-50"
         overlayClassName="fixed inset-0 bg-black bg-opacity-75 z-50"
       >
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full flex items-center justify-center">
           <button
             onClick={closeModal}
             className="absolute top-2 right-2 text-white text-2xl z-50"
@@ -177,7 +180,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ toggleDrawer }) => {
           <img
             src={image} // Use the dynamically imported image
             alt={product.title}
-            className="w-full h-full object-contain"
+            className="max-h-[80vh] object-contain"
           />
         </div>
       </Modal>
